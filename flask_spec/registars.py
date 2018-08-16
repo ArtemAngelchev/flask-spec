@@ -267,7 +267,7 @@ class FlaskSpec:
                 data = spec.to_dict()
                 info = data.pop('info')
                 yml_spec = yaml.dump(data, allow_unicode=True)
-                desc = info["description"].replace("\n", "")
+                desc = info.get("description", ' ').replace("\n", "")
                 yml_spec = (
                     'info:\n'
                     f'  title: {info["title"]}\n'
@@ -281,6 +281,8 @@ class FlaskSpec:
         if self.app_url:
             app_url = urlparse(self.app_url)
             app_url = {'host': app_url.hostname, 'basePath': app_url.path}
+        else:
+            app_url = {}
 
         title = self.app_name.title().replace('_', ' ')
         if self.env_name:

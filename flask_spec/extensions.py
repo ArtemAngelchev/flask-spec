@@ -69,14 +69,15 @@ class SpecBlueprint(Blueprint):
 
         missed = set(('name', 'description')) - data.keys()
         if missed:
+            for attr in missed:
+                data[attr] = schema_name
+
             missed = ', '.join(f'"{m}"' for m in missed)
             warnings.warn(
                 f'For schema <{schema_name}> not provided {missed}.'
                 ' Fail to default values.'
                 ' Schema class name will be used insted.', RuntimeWarning
             )
-            for attr in missed:
-                data[attr] = schema_name
 
         data['schema'] = schema
         self.spec_schemas.append(data)

@@ -1,0 +1,5 @@
+include *.rst LICENSE
+recursive-include flask_spec *
+recursive-include flask_spec/templates *
+recursive-exclude flask_spec __pycache__
+recursive-exclude flask_spec *.py[co]
