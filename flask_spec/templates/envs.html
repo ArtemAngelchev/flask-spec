@@ -1,0 +1,63 @@
+{% if openshift %}
+  <p>[ {{ openshift.commit }} {{ openshift.ref }} <a href="{{ openshift.repository }}">repository</a> ]</p>
+{% endif %}
+
+{{ description | safe }}
+
+{% for draw in drawings %}
+  <h2>{{ draw | filename_to_title }}</h2>
+  <img src="{{ compose_static_url(app_url, draw, app_apikey) }}" width=100%>
+{% endfor %}
+
+{% for draw_source in drawings_sources %}
+  <a href="{{ compose_static_url(app_url, draw_source, app_apikey) }}">{{ draw_source }}</a>
+{% endfor %}
+
+{% if envs %}
+  <h2>Переменные окружения</h2>
+
+  <table style="border:1px solid black;border-collapse:collapse;">
+    <tr>
+      <th style="border:1px solid black;border-collapse:collapse;">#</th>
+      <th style="border:1px solid black;border-collapse:collapse;">Переменная</th>
+      <th style="border:1px solid black;border-collapse:collapse;">Тип</th>
+      <th style="border:1px solid black;border-collapse:collapse;">Описание</th>
+      <th style="border:1px solid black;border-collapse:collapse;">Текущее значение</th>
+      <th style="border:1px solid black;border-collapse:collapse;">Обязательность</th>
+      <th style="border:1px solid black;border-collapse:collapse;">Значение по умолчанию</th>
+    </tr>
+  {% for env in envs %}
+    <tr>
+      <td style="border:1px solid black;border-collapse:collapse;padding:15px;">
+          {{ loop.index }}
+      </td>
+      <td style="border:1px solid black;border-collapse:collapse;padding:15px;">
+          {{ env.name }}
+      </td>
+      <td style="border:1px solid black;border-collapse:collapse;padding:15px;">
+          <code>{{ env.type }}</code>
+      </td>
+      <td style="border:1px solid black;border-collapse:collapse;padding:15px;">
+          {{ env.description }}
+      </td>
+      <td style="border:1px solid black;border-collapse:collapse;padding:15px;">
+          {% if env.data == 'скрыто' %}
+            {{ env.data }}
+          {% else %}
+            <code>{{ env.data }}</code>
+          {% endif %}
+      </td>
+      <td style="border:1px solid black;border-collapse:collapse;padding:15px;">
+          {{ env.required | humanize_required }}
+      </td>
+      <td style="border:1px solid black;border-collapse:collapse;padding:15px;">
+        {% if env.default %}
+          <code>{{ env.default }}</code>
+        {% else %}
+          не задано
+        {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </table>
+{% endif %}
