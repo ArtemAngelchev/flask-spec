@@ -288,20 +288,23 @@ class FlaskSpec:
         if self.env_name:
             title = f'{title} ({self.env_name})'
 
-        if self.app_apikey:
-            settings = {
-                'securityDefinitions': {
-                    'apiKey': {
-                        'type': 'apiKey',
-                        'in': 'query',
-                        'name': 'apikey',
-                        'description': f'ApiKey {self.app_apikey}'
-                    },
+        settings = {
+            'securityDefinitions': {
+                'basic_auth': {
+                    'type': 'basic',
                 },
-                'security': [{'apiKey': []}]
+            },
+        }
+
+        if self.app_apikey:
+            security = settings['securityDefinitions']
+            security['apikey'] = {
+                'type': 'apiKey',
+                'in': 'query',
+                'name': 'apiKey',
+                'description': f'apikey {self.app_apikey}'
             }
-        else:
-            settings = {}
+            settings['security'] = [{'apikey': []}]
 
         info = {'info': {'description': description}} if description else {}
 
