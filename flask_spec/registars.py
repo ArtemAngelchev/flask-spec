@@ -307,7 +307,7 @@ class FlaskSpec:
             security['apikey'] = {
                 'type': 'apiKey',
                 'in': 'query',
-                'name': 'apiKey',
+                'name': 'apikey',
                 'description': f'apikey {self.app_apikey}'
             }
             settings['security'] = [{'apikey': []}]
