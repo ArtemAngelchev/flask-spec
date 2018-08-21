@@ -37,7 +37,7 @@ class FlaskSpec:
             self, app, app_name=None, app_url=None, env_file=None,
             env_name=None, drawings_dir='drawings',
             description_template='envs.html', trim_bp_prefix=True,
-            schemes=('https',), openapi_version='2.0',
+            schemes=('https',), openapi_version='2.0', basicauth=False,
     ):
         self.app = app
         self.app_name = app_name
@@ -50,6 +50,7 @@ class FlaskSpec:
         self.description_template = description_template
         self.schemes = schemes
         self.openapi_version = openapi_version
+        self.basicauth = basicauth
         self._cwd = pathlib.Path(os.getcwd())
         self._plugin_root = pathlib.Path(__file__).parents[0]
 
@@ -288,15 +289,20 @@ class FlaskSpec:
         if self.env_name:
             title = f'{title} ({self.env_name})'
 
-        settings = {
-            'securityDefinitions': {
-                'basic_auth': {
-                    'type': 'basic',
+        if self.basicauth:
+            settings = {
+                'securityDefinitions': {
+                    'basic_auth': {
+                        'type': 'basic',
+                    },
                 },
-            },
-        }
+            }
+        else:
+            settings = {}
 
         if self.app_apikey:
+            if not settings:
+                settings = {'securityDefinitions': {}}
             security = settings['securityDefinitions']
             security['apikey'] = {
                 'type': 'apiKey',
