@@ -239,8 +239,8 @@ class FlaskSpec:
             )
             return None
 
-    def _add_custom_static_route(self, bp_prefix, static_folder):
-        @self.app.route(f'{bp_prefix}/static/<path:filename>')
+    def _add_custom_static_route(self, prefix, static_folder):
+        @self.app.route(f'{prefix or ""}/static/<path:filename>')
         def custom_static(filename):
             return send_from_directory(static_folder, filename)
 
