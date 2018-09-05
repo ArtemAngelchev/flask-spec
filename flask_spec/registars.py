@@ -317,7 +317,7 @@ class FlaskSpec:
         spec = APISpec(
             schemes=list(self.schemes),
             title=title,
-            version=bp_version,
+            version=bp_version or 'v1',
             openapi_version=self.openapi_version,
             plugins=[*plugins],
             **app_url,
