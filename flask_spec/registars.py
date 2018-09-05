@@ -245,7 +245,7 @@ class FlaskSpec:
             return send_from_directory(static_folder, filename)
 
     def register_blueprint(self, blueprint):
-        bp_prefix = blueprint.url_prefix
+        bp_prefix = blueprint.url_prefix or ''
 
         spec_descr = self.create_spec_description(blueprint)
 

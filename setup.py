@@ -12,7 +12,7 @@ def read(fname):
 
 
 setup(
-    name='flask-spec',
+    name='Flask-Spec',
     long_description=read('README.rst'),
     long_description_content_type="text/markdown",
     version=version,
