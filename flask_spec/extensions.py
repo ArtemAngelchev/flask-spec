@@ -7,7 +7,7 @@ from apispec.ext.marshmallow.openapi import (MARSHMALLOW_VERSION_INFO,
                                              OpenAPIConverter)
 from apispec.utils import load_yaml_from_docstring
 from flask import Blueprint
-from marshmallow import Schema
+from marshmallow import Schema, fields as mf
 
 
 class CustomFlaskPlugin(FlaskPlugin):
@@ -31,6 +31,16 @@ class CustomOpenAPIConverter(OpenAPIConverter):
             load_from = getattr(field, 'load_from', None)
             return load_from or name
         return field.data_key or name
+
+    def fields2jsonschema(
+            self, fields, schema=None, use_refs=True, dump=True, name=None
+    ):
+        fields = {
+            k: v
+            for k, v in fields.items()
+            if not (v.dump_only or isinstance(v, (mf.Method, mf.Function)))
+        }
+        return super().fields2jsonschema(fields, schema, use_refs, dump, name)
 
 
 class CustomMarshmallowPlugin(MarshmallowPlugin):
